@@ -22,7 +22,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:description="@string/service_description" android:name="BatteryMonitorService"></service>
+        <receiver android:name="BootupReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+        <service android:enabled="true" android:name="BatteryMonitorService">
+            <intent-filter>
+                <action android:name="kr.omniavinco.batterynotifier.service"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
