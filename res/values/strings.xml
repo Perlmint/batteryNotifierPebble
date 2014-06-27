@@ -3,6 +3,7 @@
 
     <string name="app_name">BatteryNotifier</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="service_description">Service for monitor battery level</string>
+    <string name="send_level">Send Current Batter Level</string>
 
 </resources>
