@@ -1,6 +1,5 @@
 package kr.omniavinco.batterynotifier;
 
-import kr.omniavinco.batterynotifier.RangeSeekBar.OnRangeSeekBarChangeListener;
 import android.os.BatteryManager;
 import android.os.Bundle;
 import android.app.Activity;
@@ -9,18 +8,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
+import android.util.Range;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.SeekBar;
-import android.widget.TextView;
-import android.widget.TextView.OnEditorActionListener;
+import org.florescu.android.rangeseekbar.RangeSeekBar;
 
 public class MainActivity extends Activity {
 	protected EditText lowerLevelLabel;
@@ -42,6 +37,7 @@ public class MainActivity extends Activity {
 		
 		lowerLevelLabel = (EditText)findViewById(R.id.lowerLevel);
 		upperLevelLabel = (EditText)findViewById(R.id.upperLevel);
+		seekBar = (RangeSeekBar<Integer>)findViewById(R.id.rangeSeekBar);
 		
 		Button button= (Button) findViewById(R.id.send_button);
 		button.setOnClickListener(new View.OnClickListener() {
@@ -58,13 +54,12 @@ public class MainActivity extends Activity {
 		    	Utils.sendBatteryLevel(context, batteryPct);
 		    }
 		});
-		
-		seekBar = new RangeSeekBar<Integer>(0, getResources().getInteger(R.integer.MaxBatteryLevel), context);
+
 		SharedPreferences pref = getSharedPreferences("kr.omniavinco.batterynotifier.pref", MODE_PRIVATE);
 		seekBar.setSelectedMinValue(pref.getInt("lower", 20));
 		seekBar.setSelectedMaxValue(pref.getInt("upper", 80));
 		updateLevelTextView();
-		seekBar.setOnRangeSeekBarChangeListener(new OnRangeSeekBarChangeListener<Integer>() {
+		seekBar.setOnRangeSeekBarChangeListener(new RangeSeekBar.OnRangeSeekBarChangeListener<Integer>() {
 		        @Override
 		        public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, Integer maxValue) {
 		        	updateLevelTextView();
@@ -74,10 +69,6 @@ public class MainActivity extends Activity {
 		        	prefEditor.commit();
 		        }
 		});
-
-		// add RangeSeekBar to pre-defined layout
-		ViewGroup layout = (ViewGroup) findViewById(R.id.setting_layout);
-		layout.addView(seekBar);
 	}
 	
 	public void updateLevelTextView()

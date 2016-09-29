@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.BatteryManager;
+import android.util.Log;
 
 public class Utils {
 	static public void sendBatteryLevel(Context context, int level) {
@@ -24,6 +25,8 @@ public class Utils {
 	    i.putExtra("messageType", "PEBBLE_ALERT");
 	    i.putExtra("sender", "BatteryNotifier");
 	    i.putExtra("notificationData", notificationData);
+
+		Log.d("BatteryNotifier", "Send battery level to Pebble");
 
 	    context.sendBroadcast(i);
 	}
