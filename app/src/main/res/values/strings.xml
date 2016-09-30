@@ -4,6 +4,17 @@
     <string name="app_name">BatteryNotifier</string>
     <string name="action_settings">Settings</string>
     <string name="service_description">Service for monitor battery level</string>
-    <string name="send_level">Send Current Batter Level</string>
+    <string name="send_level">Send Current Battery Level</string>
+    <string name="notification_title_over">Battery level is high</string>
+    <string name="notification_title_under">Battery level is low</string>
+    <string name="notification_title_test">Current battery level</string>
+    <string name="notification_body_template" formatted="false">Current Level: %d
+State: %s</string>
+    <string name="notification_open_setting">Open setting</string>
+    <string name="battery_status_charging">Charging</string>
+    <string name="battery_status_discharging">Discharging</string>
+    <string name="battery_status_full">Full</string>
+    <string name="battery_status_notcharging">Not charging</string>
+    <string name="battery_status_unknown">Unknown</string>
 
 </resources>

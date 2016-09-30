@@ -44,14 +44,8 @@ public class MainActivity extends Activity {
 		    @Override
 		    public void onClick(View v) {
 		    	Context context = getApplicationContext();
-		    	IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-				Intent batteryStatus = context.registerReceiver(null, ifilter);
-				
-		    	int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-		    	int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
-
-		    	int batteryPct = (int)(level / (float)scale * 100);
-		    	Utils.sendBatteryLevel(context, batteryPct);
+				Utils.BatteryState state = Utils.getBatteryLevel(context);
+		    	Utils.sendBatteryLevel(context, state, Utils.LevelState.Test);
 		    }
 		});
 

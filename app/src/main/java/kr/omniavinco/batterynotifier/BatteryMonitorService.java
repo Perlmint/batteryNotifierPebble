@@ -2,26 +2,22 @@ package kr.omniavinco.batterynotifier;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.os.BatteryManager;
 import android.os.IBinder;
 import android.util.Log;
 
 public class BatteryMonitorService extends Service {
-	protected int prevLevel;
+	protected Utils.BatteryState prevState;
 	protected int lowerLevel, upperLevel;
 	
 	@Override
 	public void onCreate() {
-		prevLevel = Utils.getBatteryLevel(getApplicationContext());
+		prevState = Utils.getBatteryLevel(getApplicationContext());
 		ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 		Log.i("BatteryNotifier", "Bind");
 		scheduler.scheduleAtFixedRate(new Runnable() {
@@ -31,14 +27,15 @@ public class BatteryMonitorService extends Service {
 				Log.i("BatteryNotifier", "Schedule Run");
 				Context context = getApplicationContext();
 				updateSetting();
-				int currentLevel = Utils.getBatteryLevel(context);
-				Log.i("BatteryNotifier", String.format("current Level : %d%%", currentLevel));
-		    	if (prevLevel < currentLevel && currentLevel >= upperLevel ||
-		    		prevLevel > currentLevel && currentLevel <= lowerLevel)
+				Utils.BatteryState currentState = Utils.getBatteryLevel(context);
+				Log.i("BatteryNotifier", String.format("current Level : %d%%", currentState.level));
+				final boolean over = prevState.level < currentState.level && currentState.level >= upperLevel;
+				final boolean under = prevState.level > currentState.level && currentState.level <= lowerLevel;
+		    	if (over || under)
 		    	{
-		    		Utils.sendBatteryLevel(context, currentLevel);		    		
+		    		Utils.sendBatteryLevel(context, currentState, over ? Utils.LevelState.Over : Utils.LevelState.Under);
 		    	}
-		    	prevLevel = currentLevel;
+		    	prevState = currentState;
 			}
 			
 		}, 0, 30, TimeUnit.SECONDS);
